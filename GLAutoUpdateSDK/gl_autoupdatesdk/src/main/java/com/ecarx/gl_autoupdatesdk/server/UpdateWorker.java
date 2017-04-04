@@ -9,6 +9,7 @@ import com.ecarx.gl_autoupdatesdk.type.RequestType;
 import com.ecarx.gl_autoupdatesdk.type.UpdateType;
 import com.ecarx.gl_autoupdatesdk.utils.HandlerUtil;
 import com.ecarx.gl_autoupdatesdk.utils.InstallUtil;
+import com.ecarx.gl_autoupdatesdk.utils.LogTool;
 import com.ecarx.gl_autoupdatesdk.utils.NetworkUtil;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateSP;
 
@@ -65,6 +66,7 @@ public class UpdateWorker implements Runnable {
         String response = null;
         try {
             response = check(requestType,url);
+            LogTool.d("获取下载内容："+response);
             AppUpdateInfoBean parse = parser.parse(response);
 
             if (parse == null) {

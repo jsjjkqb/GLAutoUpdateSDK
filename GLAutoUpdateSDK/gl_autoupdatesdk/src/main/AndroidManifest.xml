@@ -8,10 +8,6 @@
             android:name=".view.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
-        <activity
-            android:name=".view.DownloadDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-        </activity>
         <service android:name=".server.DownloadingService"></service>
         <receiver android:name=".receiver.DownloadProgressReceiver">
             <intent-filter>

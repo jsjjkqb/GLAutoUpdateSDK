@@ -10,6 +10,7 @@ import com.ecarx.gl_autoupdatesdk.server.IUpdateExecutor;
 import com.ecarx.gl_autoupdatesdk.server.UpdateExecutor;
 import com.ecarx.gl_autoupdatesdk.server.UpdateWorker;
 import com.ecarx.gl_autoupdatesdk.type.RequestType;
+import com.ecarx.gl_autoupdatesdk.utils.LogTool;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateConstants;
 import com.ecarx.gl_autoupdatesdk.view.UpdateDialogActivity;
 
@@ -35,6 +36,7 @@ public class UpdateAgent {
     private UpdateAgent() {
         executor = UpdateExecutor.getInstance();
     }
+
     public static UpdateAgent getInstance() {
         if (updater == null) {
             updater = new UpdateAgent();
@@ -63,12 +65,13 @@ public class UpdateAgent {
                 if (mUpdate != null) {
                     mUpdate.hasUpdate(updateInfoBean);
                 }
-
+                LogTool.d("updateInfoBean.isForce() : " + updateInfoBean.isForce());
                 Intent intent = new Intent(activity, UpdateDialogActivity.class);
                 intent.putExtra(UpdateConstants.DATA_UPDATE, updateInfoBean);
                 intent.putExtra(UpdateConstants.DATA_ACTION, UpdateConstants.UPDATE_TIE);
                 intent.putExtra(UpdateConstants.START_TYPE, true);
                 activity.startActivity(intent);
+
 
             }
 
