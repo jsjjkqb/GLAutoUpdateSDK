@@ -22,9 +22,13 @@
     	
 <--Add the dependency-->
 
+<<<<<<< HEAD
 			dependencies {
 					compile 'com.github.User:Repo:Tag'
 			}
+=======
+	 compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.0.1'
+>>>>>>> c369df050382733de30a72e966884b2269fc9a08
  
 2. 添加清单文件权限：
 
