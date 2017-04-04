@@ -25,6 +25,7 @@
 			dependencies {
 					compile 'com.github.User:Repo:Tag'
 			}
+	eg: compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.0.1'
  
 2. 添加清单文件权限：
 
