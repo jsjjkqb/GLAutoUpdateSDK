@@ -49,7 +49,7 @@ public class UpdateDialogActivity extends Activity implements View.OnClickListen
 
     private View default_update_wifi_indicator;
     private TextView default_update_content;
-    private CheckBox jjdxm_update_id_check;
+    private CheckBox default_update_id_check;
     private Button default_update_id_ok;
     private Button default_update_id_cancel;
     private AppUpdateInfoBean mUpdate;
@@ -91,6 +91,12 @@ public class UpdateDialogActivity extends Activity implements View.OnClickListen
                 default_update_wifi_indicator.setVisibility(View.VISIBLE);
             }
         }
+        if (UpdateSP.isForced()) {
+            default_update_id_cancel.setVisibility(View.INVISIBLE);
+        } else {
+            default_update_id_cancel.setVisibility(View.VISIBLE);
+        }
+
         if (finshDown) {
             //完成下载
             if (isActivityEnter) {
@@ -131,17 +137,17 @@ public class UpdateDialogActivity extends Activity implements View.OnClickListen
             default_update_id_ok.setText(R.string.default_update_updatenow);
             default_update_content.setText(updateContent);
         }
-        if (jjdxm_update_id_check != null) {
+        if (default_update_id_check != null) {
             if (GLAutoUpdateSetting.getInstance().getUpdateType() == UpdateType.checkupdate) {
                 //手动更新
-                jjdxm_update_id_check.setVisibility(View.GONE);
+                default_update_id_check.setVisibility(View.GONE);
             } else {
-                jjdxm_update_id_check.setVisibility(UpdateSP.isForced() ? View.GONE : View.VISIBLE);
+                default_update_id_check.setVisibility(UpdateSP.isForced() ? View.GONE : View.VISIBLE);
             }
         }
 
-        if (jjdxm_update_id_check != null) {
-            jjdxm_update_id_check.setOnCheckedChangeListener(this);
+        if (default_update_id_check != null) {
+            default_update_id_check.setOnCheckedChangeListener(this);
         }
         default_update_id_ok.setOnClickListener(this);
         default_update_id_cancel.setOnClickListener(this);
@@ -216,7 +222,7 @@ public class UpdateDialogActivity extends Activity implements View.OnClickListen
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && UpdateSP.isForced()) {
-            finish();
+            //finish();
             if (GLAutoUpdateSetting.getInstance().getForceListener() != null) {
                 GLAutoUpdateSetting.getInstance().getForceListener().onUserCancel(UpdateSP.isForced());
             }
