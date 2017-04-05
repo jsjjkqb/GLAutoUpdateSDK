@@ -12,7 +12,6 @@ import com.ecarx.gl_autoupdatesdk.utils.UpdateConstants;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public Button btn_force, btn_asui;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

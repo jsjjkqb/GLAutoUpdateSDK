@@ -57,6 +57,7 @@ public class AutoUpdateSDKManager {
      * @param context
      */
     public static void   updateCheck(Context context) {
+        GLAutoUpdateSetting.init(context);
             GLAutoUpdateSetting.getInstance()
                     .setUpdateType(UpdateType.autoupdate);
     }

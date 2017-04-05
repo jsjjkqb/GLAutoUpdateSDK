@@ -65,6 +65,7 @@ public class UpdateWorker implements Runnable {
     public void run() {
         String response = null;
         try {
+            /** 获取下载内容*/
             response = check(requestType,url);
             LogTool.d("获取下载内容："+response);
             AppUpdateInfoBean parse = parser.parse(response);

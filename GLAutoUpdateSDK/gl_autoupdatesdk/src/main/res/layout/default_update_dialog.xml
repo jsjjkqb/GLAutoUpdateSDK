@@ -33,7 +33,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/default_update_updatetitle"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#008bea"/>
+                android:textColor="#0097E0"/>
 
         </RelativeLayout>
 

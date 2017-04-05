@@ -30,7 +30,7 @@ import zlc.season.rxdownload2.entity.DownloadStatus;
  * <p/>
  * 版 本：1.0
  * <p/>
- * 创建日期：2012/3/26 23:25
+ * 创建日期：2017/3/26 23:25
  * <p/>
  * 描 述：原理
  * 纵线
