@@ -22,7 +22,7 @@
     	
 <--Add the dependency-->
 
-	 compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.0.1'
+	 compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.0.2'
 
  
 2. 添加清单文件权限：
