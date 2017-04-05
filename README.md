@@ -22,7 +22,6 @@
     	
 <--Add the dependency-->
 
-
 	 compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.0.2'
 
  
