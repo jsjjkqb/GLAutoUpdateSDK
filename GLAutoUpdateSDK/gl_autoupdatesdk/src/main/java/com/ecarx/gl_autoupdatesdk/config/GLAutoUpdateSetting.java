@@ -95,7 +95,7 @@ public class GLAutoUpdateSetting {
 
     public static GLAutoUpdateSetting getInstance() {
         if (instance == null) {
-            throw new RuntimeException("UpdateHelper not initialized!");
+            throw new RuntimeException("GLAutoUpdateSetting not initialized!");
         } else {
             return instance;
         }
@@ -183,6 +183,7 @@ public class GLAutoUpdateSetting {
 
     public Context getContext() {
         if (mContext == null) {
+
             throw new RuntimeException("should call UpdateConfig.install first");
         }
         return mContext;

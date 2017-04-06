@@ -60,6 +60,7 @@ public class DownloadingService extends Service {
     public void onCreate() {
         super.onCreate();
         this.mContext = this;
+        GLAutoUpdateSetting.init(mContext);
     }
 
     @Override
