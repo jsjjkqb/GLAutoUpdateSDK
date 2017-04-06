@@ -34,4 +34,5 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.14'
     compile 'zlc.season:practicalrecyclerview:1.0.8'
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.8.2@aar'
+
 }

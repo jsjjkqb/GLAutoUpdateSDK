@@ -5,7 +5,6 @@ import android.content.Context;
 import com.alibaba.fastjson.JSON;
 import com.ecarx.gl_autoupdatesdk.bean.AppUpdateInfoBean;
 import com.ecarx.gl_autoupdatesdk.bean.CheckResultRepository;
-import com.ecarx.gl_autoupdatesdk.bean.UpdateBean;
 import com.ecarx.gl_autoupdatesdk.callback.GLCallback;
 import com.ecarx.gl_autoupdatesdk.callback.GLUpdateDownloadCallback;
 import com.ecarx.gl_autoupdatesdk.callback.UICheckUpdateCallback;
@@ -57,7 +56,6 @@ public class AutoUpdateSDKManager {
      * @param context
      */
     public static void   updateCheck(Context context) {
-        GLAutoUpdateSetting.init(context);
             GLAutoUpdateSetting.getInstance()
                     .setUpdateType(UpdateType.autoupdate);
     }
@@ -132,23 +130,22 @@ public class AutoUpdateSDKManager {
                         /**真实情况下使用的解析  response接口请求返回的数据*/
                         LogTool.d("获取更新内容：" + response);
                         CheckResultRepository checkResultRepository = JSON.parseObject(response,CheckResultRepository.class);
-                        /**这里是模拟后台接口返回的json数据解析的bean，需要根据真实情况来写*/
-                        UpdateBean updateBean = checkResultRepository.getData();
+                        LogTool.d("获取更新内容：" + checkResultRepository);
                         AppUpdateInfoBean updateInfoBean = new AppUpdateInfoBean();
                         /**必填：此apk包的下载地址*/
-                        updateInfoBean.setUpdateUrl(updateBean.getDownload_url());
-                        /**必填：此apk包的版本号*/
-                        updateInfoBean.setVersionCode(updateBean.getV_code());
+                        updateInfoBean.setUpdateUrl(checkResultRepository.getData().getAndroid().get(0).getDownload_url());
+                       /**必填：此apk包的版本号*/
+                        updateInfoBean.setVersionCode(Integer.parseInt(checkResultRepository.getData().getAndroid().get(0).getV_code()));
                         /**可填：此apk包的版本号*/
-                        updateInfoBean.setApkSize(updateBean.getV_size());
-                        /**必填：此apk包的版本名称*/
-                        updateInfoBean.setVersionName(updateBean.getV_name());
-                        /**必填：此apk包的名称*/
-                        updateInfoBean.setAppName(updateBean.getApp_name());
+                        updateInfoBean.setApkSize(checkResultRepository.getData().getAndroid().get(0).getV_size());
+                       /**必填：此apk包的版本名称*/
+                        updateInfoBean.setVersionName(checkResultRepository.getData().getAndroid().get(0).getV_name());
+                       /**必填：此apk包的名称*/
+                        updateInfoBean.setAppName(checkResultRepository.getData().getAndroid().get(0).getApp_name());
                         /**可填：此apk包的更新内容*/
-                        updateInfoBean.setUpdateContent(updateBean.getUpdate_content());
+                        updateInfoBean.setUpdateContent(checkResultRepository.getData().getAndroid().get(0).getUpdate_content());
                         /**可填：此apk包是否为强制更新*/
-                        updateInfoBean.setForce(updateBean.isForce());
+                        updateInfoBean.setForce(checkResultRepository.getData().getAndroid().get(0).isForce());
                         return updateInfoBean;
                     }
                 });
