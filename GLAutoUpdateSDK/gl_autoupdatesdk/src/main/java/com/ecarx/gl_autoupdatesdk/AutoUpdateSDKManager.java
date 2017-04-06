@@ -130,7 +130,6 @@ public class AutoUpdateSDKManager {
                         /**真实情况下使用的解析  response接口请求返回的数据*/
                         LogTool.d("获取更新内容：" + response);
                         CheckResultRepository checkResultRepository = JSON.parseObject(response,CheckResultRepository.class);
-                        LogTool.d("获取更新内容：" + checkResultRepository);
                         AppUpdateInfoBean updateInfoBean = new AppUpdateInfoBean();
                         /**必填：此apk包的下载地址*/
                         updateInfoBean.setUpdateUrl(checkResultRepository.getData().getAndroid().get(0).getDownload_url());
