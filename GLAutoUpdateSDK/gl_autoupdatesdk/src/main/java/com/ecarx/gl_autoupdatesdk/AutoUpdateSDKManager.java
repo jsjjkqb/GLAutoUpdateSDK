@@ -48,7 +48,6 @@ public class AutoUpdateSDKManager {
         } else {
             callback.onError(CHECKURL_ERRODE);
         }
-        updateCheck(context);
         return GLAutoUpdateSetting.getInstance();
      }
     /**
@@ -113,6 +112,8 @@ public class AutoUpdateSDKManager {
                 .setMethod(RequestType.get)
                 /**必填：设置存储路径*/
                 .setDownloadPath(downloadPath)
+                /** 设置自动更新*/
+                .setUpdateType(UpdateType.autoupdate)
                 /**必填：数据更新接口，该方法一定要在setDialogLayout的前面,因为这方法里面做了重置DialogLayout的操作*/
                 .setCheckUrl(checkUrl)
                 /**可填：清除旧的自定义布局设置。之前有设置过自定义布局，建议这里调用下*/
