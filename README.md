@@ -25,15 +25,13 @@
 	
  <-- 支持Rxjava1-->
  
-    compile 'com.github.ecarx-dev:GLAutoUpdateSDK:-SNAPSHOT'
-	
+	 compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.1.4'
+   
    或者
  
-    compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.1.4'
+  	 compile 'com.github.ecarx-dev:GLAutoUpdateSDK:-SNAPSHOT'
+    
 
- 
- 
- <img title="普通下载" width="30%" src="https://raw.githubusercontent.com/ssseasonnn/RxDownload/master/gif/basic_download.gif">
  
 2. 添加清单文件权限：
 
