@@ -22,8 +22,7 @@
     	
 <--Add the dependency-->
 
-	 compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.0.2'
-	 
+	
  <-- 支持Rxjava1-->
  
     compile 'com.github.ecarx-dev:GLAutoUpdateSDK:-SNAPSHOT'
