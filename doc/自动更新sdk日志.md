@@ -4,11 +4,12 @@
 
 - v1.0.2 发布
 - 支持格式Rxjava2,json格式：
-
-
-    {     "code": 0,
+    {    
+    
+          "code": 0,
           "data": {
                 "download_url": "http://musicfire-log.oss-cn-hangzhou.aliyuncs.com/G-NetLink/gl_debug/auto_update_apk/G-netlink_debug.apk",
+                
                 "force": true,
                  "update_content": "海量更新内容，请尽情体验",
                  "v_code": "10",
@@ -32,6 +33,7 @@
 - 取消兼容v1.0.2的接口，json格式修改为：
 
 {
+
     "code": 0,
     "data": {
         "android": [
