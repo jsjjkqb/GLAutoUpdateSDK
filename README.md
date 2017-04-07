@@ -32,6 +32,9 @@
     compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.1.4'
 
  
+ 
+ <img title="普通下载" width="30%" src="https://raw.githubusercontent.com/ssseasonnn/RxDownload/master/gif/basic_download.gif">
+ 
 2. 添加清单文件权限：
 
 <--网络权限-->
