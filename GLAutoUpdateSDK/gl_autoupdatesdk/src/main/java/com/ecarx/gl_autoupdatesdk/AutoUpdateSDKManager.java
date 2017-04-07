@@ -102,6 +102,12 @@ public class AutoUpdateSDKManager {
     public static void asUpdateAction(Context context, UICheckUpdateCallback callback) { /* compiled code */ }
 
     /**
+     * 日志开关
+     * @param DEBUG
+     */
+    public static void setDEBUG(boolean DEBUG) { LogTool.setDEBUG(DEBUG); }
+
+    /**
      * 初始化配置
      * @param context
      */
