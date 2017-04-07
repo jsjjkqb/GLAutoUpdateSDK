@@ -26,7 +26,9 @@
 	 
  <-- 支持Rxjava1-->
  
-    compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.1.4'
+    compile 'com.github.ecarx-dev:GLAutoUpdateSDK:-SNAPSHOT'
+    或者
+    compile 'com.github.ecarx-dev:GLAutoUpdateSDK:1.1.4'
  
 2. 添加清单文件权限：
 
