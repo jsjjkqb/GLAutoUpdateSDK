@@ -12,12 +12,18 @@ import com.ecarx.gl_autoupdatesdk.config.GLAutoUpdateSetting;
 import com.ecarx.gl_autoupdatesdk.utils.LogTool;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateConstants;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import zlc.season.rxdownload.RxDownload;
 import zlc.season.rxdownload.entity.DownloadStatus;
+
+import static com.ecarx.gl_autoupdatesdk.receiver.DownloadProgressReceiver.isFirtInit;
 
 
 /**
@@ -50,7 +56,7 @@ public class DownloadingService extends Service {
     private String url;
     private Subscription subscription ;
     private int opState = 0;
-    private long percentNumber = 0;
+    private int percentNumber = 0;
 
     @Override
     public void onCreate() {
@@ -73,6 +79,7 @@ public class DownloadingService extends Service {
                     url = update.getUpdateUrl();
                     if (update != null && !TextUtils.isEmpty(url)) {
                         startDownload(url);
+                        // download();
                     }
                     break;
                 case UpdateConstants.PAUSE_DOWN:
@@ -147,6 +154,8 @@ public class DownloadingService extends Service {
                 .maxRetryCount(3)
                 /**Service同时下载数量*/
                 .maxDownloadNumber(5)
+              // .context( GLAutoUpdateSetting.getInstance().getContext())                    //自动安装需要Context
+                /*.autoInstall(true);               //下载完成自动安装*/
                 .download(url, update.getAppName(), GLAutoUpdateSetting.getInstance().getDownloadPath())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -155,7 +164,7 @@ public class DownloadingService extends Service {
                     public void onCompleted() {
                         GLAutoUpdateSetting.finshDown = true;
                         sendBroadcastType(100);
-                        stopSelf();//停止服务
+                        //stopSelf();//服务，不能停止
                         LogTool.d("下载成功");
                     }
 
@@ -168,33 +177,73 @@ public class DownloadingService extends Service {
                     @Override
                     public void onNext(final DownloadStatus status) {
                         /** 下载状态, 解决重复下载字段问题*/
-                        if (percentNumber != Long.parseLong(status.getPercent())) {
-                            LogTool.d("DownloadStatus为下载进度" + status.getPercent() + "%");
-                            percentNumber = Long.parseLong(status.getPercent());
+                        LogTool.d("DownloadStatus为下载进度" +(int) getPercent(status.getPercent()) );
+                        if (percentNumber != getPercent(status.getPercent())) {
+                            percentNumber = (int) getPercent(status.getPercent());
                             if (percentNumber < 100) {
-                                sendBroadcastType(percentNumber);
+                                updateProgress(mContext,(int) getPercent(status.getPercent()));
                             }
                         }
                     }
                 });
     }
 
+
+
+
     /**
      * 发送下载完成信息
      *
      * @param type
      */
-    private void sendBroadcastType(long type) {
+    private void sendBroadcastType(int type) {
         Intent intent = new Intent("com.cn.ecarx.update.downloadBroadcast");
         intent.putExtra("type", type);
         LogTool.d("发送下载数据： " + type);
         sendBroadcast(intent);
     }
 
+
+    /**
+     * 获得下载的百分比, 保留两位小数
+     *
+     * @return example: 5.25
+     */
+    public float getPercent(String percent) {
+        return Float.parseFloat(StringFilter(percent));
+
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
         pauseDownload(url);
         LogTool.d("服务销毁");
     }
+
+    /**
+     * 过滤特殊字符
+     * @param str
+     * @return
+     * @throws PatternSyntaxException
+     */
+    public   static   String StringFilter(String   str)   throws PatternSyntaxException {
+        // 只允许字母和数字
+        // String   regEx  =  "[^a-zA-Z0-9]";
+        // 清除掉所有特殊字符
+      //  String regEx="[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+        String regEx="[%]";
+        Pattern   p   =   Pattern.compile(regEx);
+        Matcher m   =   p.matcher(str);
+        return   m.replaceAll("").trim();
+    }
+
+    private void updateProgress(final Context context,final int type) {
+                if (isFirtInit) {
+                    isFirtInit = false;
+                    DownloadManager.getInstance(context).initUI().notifyNotification(type);
+                } else if (type > 0 && type < 100) {
+                    DownloadManager.getInstance(context).notifyNotification(type);
+                }
+                LogTool.d("刷新数据 "+type);
+            }
 }
