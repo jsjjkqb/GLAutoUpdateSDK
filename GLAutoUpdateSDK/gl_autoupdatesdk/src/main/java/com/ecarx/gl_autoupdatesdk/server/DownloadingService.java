@@ -8,9 +8,13 @@ import android.os.IBinder;
 import android.text.TextUtils;
 
 import com.ecarx.gl_autoupdatesdk.bean.AppUpdateInfoBean;
+import com.ecarx.gl_autoupdatesdk.callback.listener.IPermissionListener;
 import com.ecarx.gl_autoupdatesdk.config.GLAutoUpdateSetting;
+import com.ecarx.gl_autoupdatesdk.utils.HandlerUtil;
 import com.ecarx.gl_autoupdatesdk.utils.LogTool;
+import com.ecarx.gl_autoupdatesdk.utils.PermissionsUtil;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateConstants;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +23,7 @@ import java.util.regex.PatternSyntaxException;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import zlc.season.rxdownload.RxDownload;
 import zlc.season.rxdownload.entity.DownloadStatus;
@@ -54,9 +59,12 @@ public class DownloadingService extends Service {
     private Context mContext;
     private AppUpdateInfoBean update;
     private String url;
-    private Subscription subscription ;
+    private Subscription subscription;
     private int opState = 0;
     private int percentNumber = 0;
+    private long firstTime = 0;
+    private boolean granted = false;
+    private IPermissionListener iPermissionListener;
 
     @Override
     public void onCreate() {
@@ -78,8 +86,9 @@ public class DownloadingService extends Service {
                     update = (AppUpdateInfoBean) intent.getSerializableExtra(UpdateConstants.DATA_UPDATE);
                     url = update.getUpdateUrl();
                     if (update != null && !TextUtils.isEmpty(url)) {
-                        startDownload(url);
-                        // download();
+                        if (getRxPermissions(PermissionsUtil.WRITE_EXTERNAL_STORAGE)) {
+                            startDownload(url);
+                        }
                     }
                     break;
                 case UpdateConstants.PAUSE_DOWN:
@@ -147,14 +156,14 @@ public class DownloadingService extends Service {
      * @param url
      */
     private void startDownload(String url) {
-       subscription = RxDownload.getInstance()
+        subscription = RxDownload.getInstance()
                 /**设置最大线程*/
                 .maxThread(3)
                 /**设置下载失败重试次数*/
                 .maxRetryCount(3)
                 /**Service同时下载数量*/
                 .maxDownloadNumber(5)
-              // .context( GLAutoUpdateSetting.getInstance().getContext())                    //自动安装需要Context
+                // .context( GLAutoUpdateSetting.getInstance().getContext())                    //自动安装需要Context
                 /*.autoInstall(true);               //下载完成自动安装*/
                 .download(url, update.getAppName(), GLAutoUpdateSetting.getInstance().getDownloadPath())
                 .subscribeOn(Schedulers.io())
@@ -177,18 +186,15 @@ public class DownloadingService extends Service {
                     @Override
                     public void onNext(final DownloadStatus status) {
                         /** 下载状态, 解决重复下载字段问题*/
-                        LogTool.d("DownloadStatus为下载进度" +(int) getPercent(status.getPercent()) );
                         if (percentNumber != getPercent(status.getPercent())) {
                             percentNumber = (int) getPercent(status.getPercent());
                             if (percentNumber < 100) {
-                                updateProgress(mContext,(int) getPercent(status.getPercent()));
+                                updateProgress(mContext, (int) getPercent(status.getPercent()));
                             }
                         }
                     }
                 });
     }
-
-
 
 
     /**
@@ -213,6 +219,7 @@ public class DownloadingService extends Service {
         return Float.parseFloat(StringFilter(percent));
 
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -222,28 +229,85 @@ public class DownloadingService extends Service {
 
     /**
      * 过滤特殊字符
+     *
      * @param str
      * @return
      * @throws PatternSyntaxException
      */
-    public   static   String StringFilter(String   str)   throws PatternSyntaxException {
+    public static String StringFilter(String str) throws PatternSyntaxException {
         // 只允许字母和数字
         // String   regEx  =  "[^a-zA-Z0-9]";
         // 清除掉所有特殊字符
-      //  String regEx="[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
-        String regEx="[%]";
-        Pattern   p   =   Pattern.compile(regEx);
-        Matcher m   =   p.matcher(str);
-        return   m.replaceAll("").trim();
+        //  String regEx="[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+        String regEx = "[%]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        return m.replaceAll("").trim();
     }
 
-    private void updateProgress(final Context context,final int type) {
+    /**
+     * 获取权限
+     * @param permission
+     * @return
+     */
+    private boolean getRxPermissions(final String permission) {
+            RxPermissions mrx = new RxPermissions(GLAutoUpdateSetting.getInstance().getActivity());
+                mrx.request(permission) //申请存储卡权限
+                        .subscribe(new Action1<Boolean>() {
+                            @Override
+                            public void call(Boolean aBoolean) {
+                                if (aBoolean) {  // 在android 6.0之前会默认返回true
+                                    granted = aBoolean;
+                                    startDownload(url);
+                                    if (iPermissionListener != null) {
+                                        iPermissionListener.getPermissionListener(permission ,aBoolean);
+                                    }
+                                    LogTool.d("have permission" + android.os.Build.VERSION.SDK);
+                                } else { // 未获取权限
+                                    granted = false;
+                                    if (iPermissionListener != null) {
+                                        iPermissionListener.getPermissionListener(permission ,aBoolean);
+                                    }
+                                }
+                            }
+                        });
+        return granted;
+    }
+
+    /**
+     * 刷新数据
+     * @param context
+     * @param type
+     */
+    private void updateProgress(final Context context, final int type) {
+        HandlerUtil.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
                 if (isFirtInit) {
                     isFirtInit = false;
                     DownloadManager.getInstance(context).initUI().notifyNotification(type);
                 } else if (type > 0 && type < 100) {
+//                    interval(300);
+//                    LogTool.d("DownloadStatus为下载进度" + type);
                     DownloadManager.getInstance(context).notifyNotification(type);
                 }
-                LogTool.d("刷新数据 "+type);
+//                LogTool.d("刷新数据 " + type);
+
             }
+        });
+    }
+
+    /**
+     * 设置时间间隔
+     *
+     * @param intervalTime
+     */
+    private void interval(long intervalTime) {
+        long secondTime = System.currentTimeMillis();
+        if (secondTime - firstTime > intervalTime) {
+            firstTime = secondTime;
+        } else {
+            return;
+        }
+    }
 }

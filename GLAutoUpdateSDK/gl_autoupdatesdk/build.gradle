@@ -38,4 +38,5 @@ dependencies {
     compile 'zlc.season:rxdownload:1.2.8'
     //json数据解析工具
     compile 'com.alibaba:fastjson:1.2.14'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
 }

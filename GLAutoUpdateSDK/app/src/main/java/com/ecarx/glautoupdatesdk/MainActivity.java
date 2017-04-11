@@ -10,6 +10,7 @@ import com.ecarx.gl_autoupdatesdk.callback.GLCallback;
 import com.ecarx.gl_autoupdatesdk.utils.LogTool;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateConstants;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public Button btn_force, btn_asui;
     @Override

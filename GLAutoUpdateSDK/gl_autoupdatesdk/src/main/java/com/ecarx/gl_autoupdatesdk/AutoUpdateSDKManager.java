@@ -8,6 +8,7 @@ import com.ecarx.gl_autoupdatesdk.bean.CheckResultRepository;
 import com.ecarx.gl_autoupdatesdk.callback.GLCallback;
 import com.ecarx.gl_autoupdatesdk.callback.GLUpdateDownloadCallback;
 import com.ecarx.gl_autoupdatesdk.callback.UICheckUpdateCallback;
+import com.ecarx.gl_autoupdatesdk.callback.listener.IPermissionListener;
 import com.ecarx.gl_autoupdatesdk.config.GLAutoUpdateSetting;
 import com.ecarx.gl_autoupdatesdk.type.RequestType;
 import com.ecarx.gl_autoupdatesdk.type.UpdateType;
@@ -57,6 +58,14 @@ public class AutoUpdateSDKManager {
     public static void   updateCheck(Context context) {
             GLAutoUpdateSetting.getInstance()
                     .setUpdateType(UpdateType.autoupdate);
+    }
+
+    /**
+     *  监听获取权限
+     * @param iPermissionListener
+     */
+    public static void   setPermissionListener(IPermissionListener iPermissionListener) {
+
     }
 
     /**

@@ -147,6 +147,9 @@ public class DownloadManager {
         contentView.setTextViewText(R.id.default_update_progress_text, percent + "%");
         contentView.setProgressBar(R.id.default_update_progress_bar, 100, percent, false);
         notification.contentView = contentView;
+        if (notification.contentView != null) {
+
+        }
         notificationManager.notify(UpdateConstants.NOTIFICATION_ACTION, notification);
 
     }
