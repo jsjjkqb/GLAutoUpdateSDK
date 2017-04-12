@@ -8,6 +8,10 @@
 		（3）.安装：调用进入系统安装界面，
 		（4）.对外接口：自定义更新可配置接口和默认更新接口，
 
+## 日志更新:：
+
+[点击进入](https://github.com/ecarx-dev/GLAutoUpdateSDK/blob/master/doc/%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0sdk%E6%97%A5%E5%BF%97.md)
+
 ## 集成步骤
 
 1. 添加依赖
