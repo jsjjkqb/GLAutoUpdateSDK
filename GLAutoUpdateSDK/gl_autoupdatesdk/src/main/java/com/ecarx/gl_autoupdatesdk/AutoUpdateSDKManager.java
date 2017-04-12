@@ -64,7 +64,7 @@ public class AutoUpdateSDKManager {
      *  监听获取权限
      * @param iPermissionListener
      */
-    public static void   setPermissionListener(IPermissionListener iPermissionListener) {
+    private static void   setPermissionListener(IPermissionListener iPermissionListener) {
 
     }
 
