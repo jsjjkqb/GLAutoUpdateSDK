@@ -5,17 +5,23 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.NotificationCompat;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import com.ecarx.gl_autoupdatesdk.R;
 import com.ecarx.gl_autoupdatesdk.bean.AppUpdateInfoBean;
+import com.ecarx.gl_autoupdatesdk.config.GLAutoUpdateSetting;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateConstants;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateSP;
 
 import java.io.File;
+import java.util.LinkedList;
 
 /**
  * ========================================
@@ -145,6 +151,7 @@ public class DownloadManager {
      */
     public void notifyNotification(int percent) {
         contentView.setTextViewText(R.id.default_update_progress_text, percent + "%");
+        contentView.setInt(R.id.default_update_progress_text, "setTextColor", isDarkNotificationTheme(GLAutoUpdateSetting.getInstance().getContext())==true?Color.WHITE:Color.BLACK);
         contentView.setProgressBar(R.id.default_update_progress_bar, 100, percent, false);
         notification.contentView = contentView;
         if (notification.contentView != null) {
@@ -165,6 +172,7 @@ public class DownloadManager {
                 .setContentTitle(mContext.getApplicationContext().getString(mContext.getApplicationContext().getApplicationInfo().labelRes))
                 .setContentText("下载完成，点击安装").setTicker("任务下载完成");
         Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setDataAndType(
                 Uri.fromFile(file),
                 "application/vnd.android.package-archive");
@@ -178,4 +186,58 @@ public class DownloadManager {
                 ntfBuilder.build());
 
     }
+
+    public static boolean isDarkNotificationTheme(Context context) {
+        return !isSimilarColor(Color.BLACK, getNotificationColor(context));
+    }
+
+    /**
+     * 获取通知栏颜色
+     * @param context
+     * @return
+     */
+    public static int getNotificationColor(Context context) {
+        NotificationCompat.Builder builder=new NotificationCompat.Builder(context);
+        Notification notification=builder.build();
+        int layoutId=notification.contentView.getLayoutId();
+        ViewGroup viewGroup= (ViewGroup) LayoutInflater.from(context).inflate(layoutId, null, false);
+        if (viewGroup.findViewById(android.R.id.title)!=null) {
+            return ((TextView) viewGroup.findViewById(android.R.id.title)).getCurrentTextColor();
+        }
+        return findColor(viewGroup);
+    }
+
+    private static boolean isSimilarColor(int baseColor, int color) {
+        int simpleBaseColor=baseColor|0xff000000;
+        int simpleColor=color|0xff000000;
+        int baseRed=Color.red(simpleBaseColor)-Color.red(simpleColor);
+        int baseGreen=Color.green(simpleBaseColor)-Color.green(simpleColor);
+        int baseBlue=Color.blue(simpleBaseColor)-Color.blue(simpleColor);
+        double value=Math.sqrt(baseRed*baseRed+baseGreen*baseGreen+baseBlue*baseBlue);
+        if (value<180.0) {
+            return true;
+        }
+        return false;
+    }
+    private static int findColor(ViewGroup viewGroupSource) {
+        int color=Color.TRANSPARENT;
+        LinkedList<ViewGroup> viewGroups=new LinkedList<>();
+        viewGroups.add(viewGroupSource);
+        while (viewGroups.size()>0) {
+            ViewGroup viewGroup1=viewGroups.getFirst();
+            for (int i = 0; i < viewGroup1.getChildCount(); i++) {
+                if (viewGroup1.getChildAt(i) instanceof ViewGroup) {
+                    viewGroups.add((ViewGroup) viewGroup1.getChildAt(i));
+                }
+                else if (viewGroup1.getChildAt(i) instanceof TextView) {
+                    if (((TextView) viewGroup1.getChildAt(i)).getCurrentTextColor()!=-1) {
+                        color=((TextView) viewGroup1.getChildAt(i)).getCurrentTextColor();
+                    }
+                }
+            }
+            viewGroups.remove(viewGroup1);
+        }
+        return color;
+    }
+
 }

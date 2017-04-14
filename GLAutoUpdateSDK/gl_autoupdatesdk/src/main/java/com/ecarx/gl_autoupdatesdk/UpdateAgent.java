@@ -67,6 +67,7 @@ public class UpdateAgent {
                 }
                 LogTool.d("updateInfoBean.isForce() : " + updateInfoBean.isForce());
                 Intent intent = new Intent(activity, UpdateDialogActivity.class);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.putExtra(UpdateConstants.DATA_UPDATE, updateInfoBean);
                 intent.putExtra(UpdateConstants.DATA_ACTION, UpdateConstants.UPDATE_TIE);
                 intent.putExtra(UpdateConstants.START_TYPE, true);

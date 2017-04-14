@@ -204,6 +204,7 @@ public class DownloadingService extends Service {
      */
     private void sendBroadcastType(int type) {
         Intent intent = new Intent("com.cn.ecarx.update.downloadBroadcast");
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.putExtra("type", type);
         LogTool.d("发送下载数据： " + type);
         sendBroadcast(intent);
