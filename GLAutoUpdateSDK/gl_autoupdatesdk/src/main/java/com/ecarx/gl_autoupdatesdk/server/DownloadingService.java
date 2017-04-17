@@ -290,8 +290,6 @@ public class DownloadingService extends Service {
                     LogTool.d("DownloadStatus为下载进度" + type);
                    DownloadManager.getInstance(context).notifyNotification(type);
                 }
-//                LogTool.d("刷新数据 " + type);
-
             }
         });
     }
