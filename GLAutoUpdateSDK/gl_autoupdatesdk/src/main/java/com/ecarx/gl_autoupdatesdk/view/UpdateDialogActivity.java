@@ -3,11 +3,8 @@ package com.ecarx.gl_autoupdatesdk.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.LayoutRes;
-import android.support.v4.content.FileProvider;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -75,7 +72,7 @@ public class UpdateDialogActivity extends Activity implements View.OnClickListen
         Intent intent = getIntent();
         mUpdate = (AppUpdateInfoBean) intent.getSerializableExtra(UpdateConstants.DATA_UPDATE);
         mAction = intent.getIntExtra(UpdateConstants.DATA_ACTION, 0);
-        mPath =  getAppPath();
+        mPath = getAppPath();
         LogTool.d("下载路径 :" + mPath);
         isActivityEnter = intent.getBooleanExtra(UpdateConstants.START_TYPE, false);
         String updateContent = null;
@@ -114,7 +111,7 @@ public class UpdateDialogActivity extends Activity implements View.OnClickListen
                 default_update_content.setText(updateContent);
             } else {
                 /**服务方式方式调起的*/
-                InstallUtil.installApk(mContext,  mPath);
+                InstallUtil.installApk(mContext, mPath);
                 finish();
                 if (GLAutoUpdateSetting.getInstance().getForceListener() != null) {
                     GLAutoUpdateSetting.getInstance().getForceListener().onUserCancel(UpdateSP.isForced());
@@ -153,7 +150,7 @@ public class UpdateDialogActivity extends Activity implements View.OnClickListen
                         InstallUtil.installApk(mContext, mPath);
                         finish();
                     } catch (Exception ex) {
-                        LogTool.d(" :: " +ex +":::");
+                        LogTool.d(" :: " + ex + ":::");
                     }
                 } else {
                     Intent intent = new Intent(mContext, DownloadingService.class);
@@ -165,18 +162,13 @@ public class UpdateDialogActivity extends Activity implements View.OnClickListen
                 }
             } else {
                 Intent intent = new Intent(mContext, DownloadingService.class);
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    intent.putExtra(UpdateConstants.DATA_ACTION, UpdateConstants.START_DOWN);
-                    intent.putExtra(UpdateConstants.DATA_UPDATE, mUpdate);
-                } else {
-                        String authority = GLAutoUpdateSetting.getInstance().getActivity().getPackageName() + ".provider";
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(GLAutoUpdateSetting.getInstance().getActivity(), authority,new File(mPath)));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                }
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.putExtra(UpdateConstants.DATA_ACTION, UpdateConstants.START_DOWN);
+                intent.putExtra(UpdateConstants.DATA_UPDATE, mUpdate);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startService(intent);
                 finish();
-                LogTool.d("isForced  : " + UpdateSP.isForced() );
+                LogTool.d("isForced  : " + UpdateSP.isForced());
                 LogTool.d("获取更新点击事件");
             }
         } else if (id == R.id.default_update_id_cancel) {

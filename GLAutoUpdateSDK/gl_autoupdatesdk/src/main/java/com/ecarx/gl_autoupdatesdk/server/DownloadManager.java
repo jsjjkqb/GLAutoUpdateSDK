@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.RemoteViews;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.ecarx.gl_autoupdatesdk.R;
 import com.ecarx.gl_autoupdatesdk.bean.AppUpdateInfoBean;
 import com.ecarx.gl_autoupdatesdk.config.GLAutoUpdateSetting;
+import com.ecarx.gl_autoupdatesdk.utils.LogTool;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateConstants;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateSP;
 
@@ -165,6 +168,7 @@ public class DownloadManager {
      * 显示安装
      */
     public void showInstallNotificationUI(File file) {
+        String type = "application/vnd.android.package-archive";
         if (ntfBuilder == null) {
             ntfBuilder = new NotificationCompat.Builder(mContext.getApplicationContext());
         }
@@ -172,10 +176,20 @@ public class DownloadManager {
                 .setContentTitle(mContext.getApplicationContext().getString(mContext.getApplicationContext().getApplicationInfo().labelRes))
                 .setContentText("下载完成，点击安装").setTicker("任务下载完成");
         Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.setDataAndType(
-                Uri.fromFile(file),
-                "application/vnd.android.package-archive");
+        if (!file.exists()) {
+            LogTool.d("文件不存在");
+            return;
+        }
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            Uri contentUri = FileProvider.getUriForFile(GLAutoUpdateSetting.getInstance().getContext(), "com.ecarx.gl_autoupdatesdk.fileProvider", file);
+            intent.setDataAndType(contentUri, type);
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), type);
+        }
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 mContext, 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
