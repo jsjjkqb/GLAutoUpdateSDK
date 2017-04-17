@@ -45,7 +45,8 @@ public class InstallUtil {
         }
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            Uri contentUri = FileProvider.getUriForFile(context, "com.ecarx.gl_autoupdatesdk.fileProvider", pluginfile);
+            Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName()+".fileProvider", pluginfile);
+            LogTool.d(context.getPackageName()+".fileProvider");
             intent.setDataAndType(contentUri, type);
         } else {
         intent.setDataAndType(Uri.fromFile(pluginfile), type);

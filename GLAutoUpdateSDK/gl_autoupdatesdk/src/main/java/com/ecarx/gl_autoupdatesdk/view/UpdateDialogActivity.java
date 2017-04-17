@@ -17,7 +17,6 @@ import com.ecarx.gl_autoupdatesdk.bean.AppUpdateInfoBean;
 import com.ecarx.gl_autoupdatesdk.config.GLAutoUpdateSetting;
 import com.ecarx.gl_autoupdatesdk.server.DownloadingService;
 import com.ecarx.gl_autoupdatesdk.utils.FileUtils;
-import com.ecarx.gl_autoupdatesdk.utils.InstallUtil;
 import com.ecarx.gl_autoupdatesdk.utils.LogTool;
 import com.ecarx.gl_autoupdatesdk.utils.NetworkUtil;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateConstants;
@@ -27,6 +26,7 @@ import java.io.File;
 
 import static com.ecarx.gl_autoupdatesdk.config.GLAutoUpdateSetting.appname;
 import static com.ecarx.gl_autoupdatesdk.config.GLAutoUpdateSetting.finshDown;
+import static com.ecarx.gl_autoupdatesdk.utils.InstallUtil.installApk;
 
 
 /**
@@ -111,7 +111,13 @@ public class UpdateDialogActivity extends Activity implements View.OnClickListen
                 default_update_content.setText(updateContent);
             } else {
                 /**服务方式方式调起的*/
-                InstallUtil.installApk(mContext, mPath);
+                try {
+                    installApk(mContext, mPath);
+                    finish();
+                } catch (Exception ex) {
+                    LogTool.d(" :: " + ex + ":::");
+
+                }
                 finish();
                 if (GLAutoUpdateSetting.getInstance().getForceListener() != null) {
                     GLAutoUpdateSetting.getInstance().getForceListener().onUserCancel(UpdateSP.isForced());
@@ -147,10 +153,11 @@ public class UpdateDialogActivity extends Activity implements View.OnClickListen
 
                 if (finshDown) {
                     try {
-                        InstallUtil.installApk(mContext, mPath);
+                       installApk(mContext, mPath);
                         finish();
                     } catch (Exception ex) {
                         LogTool.d(" :: " + ex + ":::");
+
                     }
                 } else {
                     Intent intent = new Intent(mContext, DownloadingService.class);

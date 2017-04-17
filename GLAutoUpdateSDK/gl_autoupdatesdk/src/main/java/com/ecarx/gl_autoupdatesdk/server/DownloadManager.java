@@ -18,13 +18,15 @@ import android.widget.TextView;
 
 import com.ecarx.gl_autoupdatesdk.R;
 import com.ecarx.gl_autoupdatesdk.bean.AppUpdateInfoBean;
-import com.ecarx.gl_autoupdatesdk.config.GLAutoUpdateSetting;
+import com.ecarx.gl_autoupdatesdk.receiver.DownloadProgressReceiver;
 import com.ecarx.gl_autoupdatesdk.utils.LogTool;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateConstants;
 import com.ecarx.gl_autoupdatesdk.utils.UpdateSP;
 
 import java.io.File;
 import java.util.LinkedList;
+
+import static com.ecarx.gl_autoupdatesdk.R.id.default_update_progress_bar;
 
 /**
  * ========================================
@@ -101,7 +103,7 @@ public class DownloadManager {
         }
         contentView.setImageViewResource(R.id.default_update_iv_icon, mContext.getApplicationInfo().icon);
         contentView.setTextViewText(R.id.default_update_title, mContext.getString(mContext.getApplicationInfo().labelRes));
-        contentView.setProgressBar(R.id.default_update_progress_bar, 100, 0, false);
+        contentView.setProgressBar(default_update_progress_bar, 100, 0, false);
         contentView.setTextViewText(R.id.default_update_progress_text, "0%");
 
         /**暂停和开始*/
@@ -154,14 +156,11 @@ public class DownloadManager {
      */
     public void notifyNotification(int percent) {
         contentView.setTextViewText(R.id.default_update_progress_text, percent + "%");
-        contentView.setInt(R.id.default_update_progress_text, "setTextColor", isDarkNotificationTheme(GLAutoUpdateSetting.getInstance().getContext())==true?Color.WHITE:Color.BLACK);
-        contentView.setProgressBar(R.id.default_update_progress_bar, 100, percent, false);
+//        contentView.setInt(default_update_progress_bar, "setTextColor", isDarkNotificationTheme(GLAutoUpdateSetting.getInstance().getContext())==true?Color.WHITE:Color.BLACK);
+        contentView.setProgressBar(default_update_progress_bar, 100, percent, false);
         notification.contentView = contentView;
-        if (notification.contentView != null) {
-
-        }
         notificationManager.notify(UpdateConstants.NOTIFICATION_ACTION, notification);
-
+        DownloadProgressReceiver.isFirtInit = false;
     }
 
     /**
@@ -185,11 +184,11 @@ public class DownloadManager {
         }
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            Uri contentUri = FileProvider.getUriForFile(GLAutoUpdateSetting.getInstance().getContext(), "com.ecarx.gl_autoupdatesdk.fileProvider", file);
+            Uri contentUri = FileProvider.getUriForFile(mContext, mContext.getPackageName()+".fileProvider", file);
             intent.setDataAndType(contentUri, type);
         } else {
             intent.setDataAndType(Uri.fromFile(file), type);
-        }
+    }
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 mContext, 0, intent, 0);
         ntfBuilder.setContentIntent(pendingIntent);
@@ -215,7 +214,7 @@ public class DownloadManager {
         Notification notification=builder.build();
         int layoutId=notification.contentView.getLayoutId();
         ViewGroup viewGroup= (ViewGroup) LayoutInflater.from(context).inflate(layoutId, null, false);
-        if (viewGroup.findViewById(android.R.id.title)!=null) {
+        if (viewGroup.findViewById(android.R.id.title) != null) {
             return ((TextView) viewGroup.findViewById(android.R.id.title)).getCurrentTextColor();
         }
         return findColor(viewGroup);

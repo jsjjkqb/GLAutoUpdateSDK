@@ -61,7 +61,7 @@ public class DownloadingService extends Service {
     private String url;
     private Subscription subscription;
     private int opState = 0;
-    private int percentNumber = 0;
+    private int currProgress = 0;
     private long firstTime = 0;
     private boolean granted = false;
     private IPermissionListener iPermissionListener;
@@ -116,7 +116,7 @@ public class DownloadingService extends Service {
      */
     private boolean isDownloading(String url) {
         //接收事件可以在任何地方接收，不管该任务是否开始下载均可接收.
-        if (percentNumber < 100) {
+        if (currProgress < 100) {
             return true;
         } else {
             return false;
@@ -158,13 +158,11 @@ public class DownloadingService extends Service {
     private void startDownload(String url) {
         subscription = RxDownload.getInstance()
                 /**设置最大线程*/
-                .maxThread(3)
+                .maxThread(5)
                 /**设置下载失败重试次数*/
-                .maxRetryCount(3)
+                .maxRetryCount(100)
                 /**Service同时下载数量*/
                 .maxDownloadNumber(5)
-                // .context( GLAutoUpdateSetting.getInstance().getContext())                    //自动安装需要Context
-                /*.autoInstall(true);               //下载完成自动安装*/
                 .download(url, update.getAppName(), GLAutoUpdateSetting.getInstance().getDownloadPath())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -186,9 +184,10 @@ public class DownloadingService extends Service {
                     @Override
                     public void onNext(final DownloadStatus status) {
                         /** 下载状态, 解决重复下载字段问题*/
-                        if (percentNumber != getPercent(status.getPercent())) {
-                            percentNumber = (int) getPercent(status.getPercent());
-                            if (percentNumber < 100) {
+                        if (currProgress < (int) getPercent(status.getPercent())) {
+                            currProgress = (int) getPercent(status.getPercent());
+//                            LogTool.d("download progress :"+currProgress);
+                            if (currProgress < 100) {
                                 updateProgress(mContext, (int) getPercent(status.getPercent()));
                             }
                         }
@@ -285,12 +284,11 @@ public class DownloadingService extends Service {
             @Override
             public void run() {
                 if (isFirtInit) {
-                    isFirtInit = false;
                     DownloadManager.getInstance(context).initUI().notifyNotification(type);
                 } else if (type > 0 && type < 100) {
-//                    interval(300);
-//                    LogTool.d("DownloadStatus为下载进度" + type);
-                    DownloadManager.getInstance(context).notifyNotification(type);
+                   interval(500);
+                    LogTool.d("DownloadStatus为下载进度" + type);
+                   DownloadManager.getInstance(context).notifyNotification(type);
                 }
 //                LogTool.d("刷新数据 " + type);
 

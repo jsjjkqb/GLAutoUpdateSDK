@@ -43,7 +43,7 @@ public class AutoUpdateSDKManager {
      */
     public static GLAutoUpdateSetting init(Context context, String checkUrl, GLCallback callback) {
         if (checkUrl != null) {
-            initCustom(context,checkUrl, getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS).getAbsolutePath(),
+            initCustom(context,checkUrl,getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS).getPath(),
                     R.layout.default_update_dialog, R.layout.default_download_notification, R.layout.default_update_dialog);
             callback.onResult(true);
         } else {

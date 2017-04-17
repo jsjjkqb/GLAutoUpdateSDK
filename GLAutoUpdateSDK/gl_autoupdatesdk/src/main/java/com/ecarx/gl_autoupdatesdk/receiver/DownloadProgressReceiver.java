@@ -9,6 +9,10 @@ import com.ecarx.gl_autoupdatesdk.server.DownloadManager;
 import com.ecarx.gl_autoupdatesdk.utils.HandlerUtil;
 import com.ecarx.gl_autoupdatesdk.utils.LogTool;
 
+import java.io.File;
+
+import static com.ecarx.gl_autoupdatesdk.config.GLAutoUpdateSetting.appname;
+
 /**
  * ========================================
  * 作 者：zhaochong
@@ -45,7 +49,12 @@ public class DownloadProgressReceiver extends BroadcastReceiver {
                 if (GLAutoUpdateSetting.finshDown) {
                     GLAutoUpdateSetting.getInstance().check((GLAutoUpdateSetting.getInstance().getActivity()));
                     //下载完成
-            //        DownloadManager.getInstance(context).showInstallNotificationUI(new File(appname));
+                    try {
+                        DownloadManager.getInstance(context).showInstallNotificationUI(new File(appname));
+                    } catch (Exception e) {
+                        LogTool.d("安装的异常"+e);
+                    }
+
                 }
 
                 LogTool.d("刷新数据 " + type);

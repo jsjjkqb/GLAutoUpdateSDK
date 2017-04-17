@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_asui = (Button) findViewById(R.id.btn_asui);
         btn_force = (Button) findViewById(R.id.btn_force);
         init(UpdateConstants.CHECKURL_TEST);
+
     }
 
     /**
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_force:
-                init(UpdateConstants.CHECKURL_DEBUG);
                 LogTool.d("强制更新");
                 break;
             case R.id.btn_asui:
