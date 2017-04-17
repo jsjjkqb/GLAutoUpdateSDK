@@ -156,8 +156,8 @@ public class DownloadManager {
      */
     public void notifyNotification(int percent) {
         contentView.setTextViewText(R.id.default_update_progress_text, percent + "%");
-//        contentView.setInt(default_update_progress_bar, "setTextColor", isDarkNotificationTheme(GLAutoUpdateSetting.getInstance().getContext())==true?Color.WHITE:Color.BLACK);
-        contentView.setProgressBar(default_update_progress_bar, 100, percent, false);
+//        contentView.setInt(R.id.default_update_progress_text, "setTextColor", isDarkNotificationTheme(GLAutoUpdateSetting.getInstance().getContext())==true?Color.WHITE:Color.BLACK);
+        contentView.setProgressBar(R.string.default_progress_color, 100, percent, true);
         notification.contentView = contentView;
         notificationManager.notify(UpdateConstants.NOTIFICATION_ACTION, notification);
         DownloadProgressReceiver.isFirtInit = false;

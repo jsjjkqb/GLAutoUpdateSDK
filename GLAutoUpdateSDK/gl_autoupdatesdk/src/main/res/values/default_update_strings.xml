@@ -12,5 +12,6 @@
     <string name="default_update_installnow">立即安装</string>
     <string name="default_update_notnow">以后再说</string>
     <string name="default_update_ignore">忽略该版</string>
+    <string name="default_progress_color">#FFA500</string>
     <string name="default_update_dialog_installapk">最新版本已下载，是否安装？</string>
 </resources>

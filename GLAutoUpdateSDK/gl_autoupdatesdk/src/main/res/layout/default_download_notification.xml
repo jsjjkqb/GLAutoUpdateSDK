@@ -39,12 +39,15 @@
             android:singleLine="true"
             android:text=""/>
 
-        <ProgressBar
+        <FlikerProgressBar
             android:id="@+id/default_update_progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="12dp"
-            android:paddingRight="25dp"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:loadingColor="#40c4ff"
+            android:stopColor="#ff9800"
+            android:radius="20dp"
+            />
 
         <TextView
             android:id="@+id/default_update_progress_text"
