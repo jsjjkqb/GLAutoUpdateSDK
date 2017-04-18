@@ -75,9 +75,9 @@
     	</application>
 
 
-3. 下载文件模板
+3. 文件模板
 
-[点击下载file_paths文件](https://github.com/ecarx-dev/GLAutoUpdateSDK/blob/master/doc/%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0sdk%E6%97%A5%E5%BF%97.md)
+[点击进入 file_paths文件](https://github.com/ecarx-dev/GLAutoUpdateSDK/blob/master/GLAutoUpdateSDK/app/src/main/res/xml/file_paths.xml)
 
 ## 检测更新接口地址：
 
