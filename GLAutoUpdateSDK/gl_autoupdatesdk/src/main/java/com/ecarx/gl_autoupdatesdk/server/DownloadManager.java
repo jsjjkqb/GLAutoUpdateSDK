@@ -99,7 +99,7 @@ public class DownloadManager {
         }
         contentView.setImageViewResource(R.id.default_update_iv_icon, mContext.getApplicationInfo().icon);
         contentView.setTextViewText(R.id.default_update_title, mContext.getString(mContext.getApplicationInfo().labelRes));
-//        contentView.setProgressBar(default_update_progress_bar, 100, 0, false);
+        contentView.setProgressBar(R.id.default_update_progress_bar, 100, 0, false);
         contentView.setTextViewText(R.id.default_update_progress_text, "0%");
 
         /**暂停和开始*/
@@ -151,17 +151,9 @@ public class DownloadManager {
      * 刷新下载进度
      */
     public void notifyNotification(final Context context,int percent) {
-        if (bnp != null) {
-            bnp.incrementProgressBy(percent);
-        }
-        /*bnp.setOnProgressBarListener(new OnProgressBarListener() {
-            @Override
-            public void onProgressChange(int current, int max) {
 
-            }
-        });*/
         contentView.setTextViewText(R.id.default_update_progress_text, percent + "%");
-        contentView.setProgressBar(R.string.default_progress_color, 100, percent, false);
+        contentView.setProgressBar(R.id.default_update_progress_bar, 100, percent, false);
         notification.contentView = contentView;
         notificationManager.notify(UpdateConstants.NOTIFICATION_ACTION, notification);
         DownloadProgressReceiver.isFirtInit = false;

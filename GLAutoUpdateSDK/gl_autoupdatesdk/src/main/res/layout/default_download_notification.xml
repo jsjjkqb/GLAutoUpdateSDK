@@ -40,13 +40,21 @@
             android:singleLine="true"
             android:text=""/>
 
-        <com.daimajia.numberprogressbar.NumberProgressBar
-            android:id="@+id/numberbar1"
-            android:layout_width="wrap_content"
-            android:padding="20dp"
-            custom:progress_current="0"
-            style="@style/NumberProgressBar_Default"
-            android:layout_height="wrap_content" />
+        <ProgressBar
+            android:id="@+id/default_update_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:indeterminateDrawable="@drawable/progressbar_style"
+            android:layout_height="12dp"
+            android:paddingRight="25dp" />
+
+          <!--  <com.daimajia.numberprogressbar.NumberProgressBar
+                android:id="@+id/default_update_progress_bar"
+                android:layout_width="wrap_content"
+                android:padding="20dp"
+                custom:progress_current="0"
+                style="@style/NumberProgressBar_Default"
+                android:layout_height="wrap_content" />-->
 
         <TextView
             android:id="@+id/default_update_progress_text"
