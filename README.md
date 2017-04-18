@@ -29,7 +29,7 @@
 	
  <-- 支持Rxjava1-->
  
-	  compile 'com.github.ecarx-dev:GLAutoUpdateSDK:v1.1.5'
+	  compile 'com.github.ecarx-dev:GLAutoUpdateSDK:v1.1.6'
    
     
 
