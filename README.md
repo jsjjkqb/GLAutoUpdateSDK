@@ -62,7 +62,7 @@
 		
 			<provider
 			
-			     android:name="android.support.v4.content.FileProvider"
+			         android:name="android.support.v4.content.FileProvider"
 				 android:authorities="com.xxx包名.fileProvider"
 				 android:grantUriPermissions="true"
 				 android:exported="false"> 
