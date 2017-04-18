@@ -286,7 +286,7 @@ public class DownloadingService extends Service {
                 if (isFirtInit) {
                     DownloadManager.getInstance(context).initUI().notifyNotification(context,type);
                 } else if (type > 0 && type < 100) {
-                   interval(500);
+                     interval(1000);
                     LogTool.d("DownloadStatus为下载进度" + type);
                    DownloadManager.getInstance(context).notifyNotification(context,type);
                 }
