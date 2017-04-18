@@ -55,7 +55,7 @@
     	 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	 
      
- <-- 添加provide 权限 -->  
+ <-- 添加provider 权限 -->  
  
  
 		</application>
