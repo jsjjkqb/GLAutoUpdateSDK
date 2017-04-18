@@ -284,11 +284,11 @@ public class DownloadingService extends Service {
             @Override
             public void run() {
                 if (isFirtInit) {
-                    DownloadManager.getInstance(context).initUI().notifyNotification(type);
+                    DownloadManager.getInstance(context).initUI().notifyNotification(context,type);
                 } else if (type > 0 && type < 100) {
                    interval(500);
                     LogTool.d("DownloadStatus为下载进度" + type);
-                   DownloadManager.getInstance(context).notifyNotification(type);
+                   DownloadManager.getInstance(context).notifyNotification(context,type);
                 }
             }
         });

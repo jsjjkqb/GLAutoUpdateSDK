@@ -40,4 +40,5 @@ dependencies {
     //json数据解析工具
     compile 'com.alibaba:fastjson:1.2.14'
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
+    compile 'com.daimajia.numberprogressbar:library:1.4@aar'
 }
