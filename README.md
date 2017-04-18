@@ -39,10 +39,9 @@
 
 <--网络权限-->
 
-      	 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	 
-	 
-	     <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            
+            <uses-permission android:name="android.permission.INTERNET"/>
       
 <--在SDCard中创建与删除文件权限--> 
      
