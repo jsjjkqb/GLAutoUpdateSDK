@@ -41,7 +41,8 @@
 
       	 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	 
-	 <uses-permission android:name="android.permission.INTERNET"/>
+	 
+	     <uses-permission android:name="android.permission.INTERNET"/>
       
 <--在SDCard中创建与删除文件权限--> 
      
@@ -60,23 +61,23 @@
  
 		</application>
 		
-    			<provider
-          	 		 android:name="android.support.v4.content.FileProvider"
+			<provider
+			
+          	 	 android:name="android.support.v4.content.FileProvider"
 				 android:authorities="com.xxx包名.fileProvider"
 				 android:grantUriPermissions="true"
 				 android:exported="false"> 
 				 <meta-data
 				 android:name="android.support.FILE_PROVIDER_PATHS"
 				 android:resource="@xml/file_paths" /> 
-			</provider>
-			  
-    		</application>
+				 
+			</provider>  
+			
+    	</application>
 
 
- 
- [点击下载file_paths文件](https://github.com/ecarx-dev/GLAutoUpdateSDK/blob/master/doc/%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0sdk%E6%97%A5%E5%BF%97.md)
- 
-3. 调用接口
+3. 下载文件模板
+[点击下载file_paths文件](https://github.com/ecarx-dev/GLAutoUpdateSDK/blob/master/doc/%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0sdk%E6%97%A5%E5%BF%97.md)
 
 ## 检测更新接口地址：
 
