@@ -41,3 +41,6 @@ applicationVariants.all { variant ->
         }
     }
 }
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd_hh-mm-ss", TimeZone.getTimeZone("GMT+08:00"))
+}
