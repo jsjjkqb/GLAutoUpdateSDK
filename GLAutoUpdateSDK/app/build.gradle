@@ -32,13 +32,11 @@ dependencies {
     compile project(path: ':gl_autoupdatesdk')
 }
 
-applicationVariants.all { variant ->
+android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
-        def apk = output.outputFile
-        if (apk != null && apk.name.endsWith('.apk')) {
-            def fileName = "cmfchina_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
-            output.outputFile = new File(apk.parent + "/package", fileName)
-        }
+//        def newVersionCode = bumpVersionCode(APP_USER_VERSION_CODE);
+        def file = output.outputFile
+        output.outputFile = new File(file.parent, file.name.replace(".apk", "-" + releaseTime()+ ".apk"))
     }
 }
 def releaseTime() {
